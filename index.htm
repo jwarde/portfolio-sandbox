@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+<style type="text/css" >
+body { 
+text-align: center;
+font-size: 20px;
+}
+
+li {
+	background-color: red !important;
+	background: green !important;
+}
+
+li a {
+	color:white !important;
+	background-color: red !important;
+}
+
+#HeaderId {
+	max-height: 50px !important;
+	height: 50px !important;
+	
+}
+
+#NavId {
+	position: relative !important;
+    top: -45px !important;
+}
+
+#FormId {
+	margin-top:20px !important;
+	margin-bottom:35px !important;
+}
+
+#ContentHeader {
+	margin-bottom:35px !important;
+}
+
+#FinancialProduct {
+	margin-top:-15px !important;
+	margin-bottom:-15px !important;
+}
+</style>
+
+</head>
+<body>
+<div data-role="page" id="pageMain">
+
+<div id="HeaderId" data-role="header" data-position="fixed">
+<p>Portfolio Sandbox</p>
+ <div id="NavId" data-role="navbar" >
+    <ul>
+
+	  <li><a href="index1.html" data-role="button">Home</a></li>
+	  <li><a href="index1.html" data-role="button">Savings</a></li>
+	  <li><a href="index1.html" data-role="button">Investments</a></li>
+	  <li><a href="index1.html" data-role="button">Insurance</a></li>
+    </ul>
+  </div>
+
+</div>
+
+  <div data-role="main" class="ui-content">
+    <div class="ui-grid-solo ui-content">
+      <div class="ui-block-a">
+
+		
+		<p id="ContentHeader">Welcome to <strong>Portfolio Sandbox.</strong> Fill out the below details to determine the projected results.</p>
+		
+		<div data-role="collapsibleset">
+		  <div data-role="collapsible">
+			<h3>Amount To Save / Invest</h3>
+			<label for="CapitalInput">Enter Amount & Select Policy to see Expected Returns</label>
+			<input name="CapitalInput" id="CapitalInput" />
+		  </div>
+		  
+		  <div data-role="collapsible">
+			<h3>Financial Product</h3>
+			<fieldset class="ui-field-contain" >
+			    <select name="inputType" id="FinancialProduct" data-bind="textInput: FinancialProductInput">
+
+					<!-- This is Phantom Data -->
+					<!-- This is Phantom Financial Institution -->
+					<optgroup label="Ketley LLP">
+							<!-- Phantom Interest Rates and Policy Names-->
+							<option value="7.5" >High Interest</option>
+					      	<option value="9">ISA Mini</option>
+					      	<option value="11">ISA Maxi</option>
+					      	<option value="3.2">Endowment</option>
+					</optgroup>
+					
+					<optgroup label="Walcot Bros">
+							<option value="0.2">Whole Of Life</option>
+							<option value="0.5">Income Protection Insurance</option>
+					      	<option value="3.75">Endowment</option>
+					</optgroup>
+					
+			    </select>
+		  	</fieldset>
+		  </div>
+		  
+		  <div data-role="collapsible">
+			<h3>Projections</h3>
+			<text>These are the projected returns for 25 years of investment</text><br />
+			<p id="Projection"></p>
+		  </div>
+		  
+		</div>
+
+		<span id="OverviewResults"></span>
+		<input type="submit" class="ui-btn ui-corner-all ui-shadow" value="Calculate" onclick="calcProjection()"><br>
+
+        <span>Remember there a <strong>tax liabilities</strong> for certain financial products, some <strong>products and institutions</strong> have <strong>higher levels of risk.</strong> Always consult an advisor if unsure.</span>
+      </div>
+    </div>
+
+
+  </div>
+
+  <div data-role="footer">
+    <h3>Copyright 2017 John Warde</h3>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+
+function calcProjection() {
+
+//Declare & populate the array and variables
+var projectArray = [];
+var text = "";
+var capital = document.getElementById("CapitalInput").value;
+var INT = document.getElementById("FinancialProduct").value;
+
+//Populate Array with Calculated Annual Year Projections 
+var i;
+for (i = 0; i < 26; i++) {
+	if (i < 1) {
+	projectArray[0] = Number(capital);
+	} else {
+	projectArray[i] = (Number(projectArray[i-1]) + (Number(projectArray[i-1]) * (Number(INT)/100)));
+	}
+} 	
+
+//Write Array of Calculated Annual Year Projections to the Projections Collapsible on page 	
+var text = "";
+var j;
+for (j = 0; j < 26; j++) {
+    text += "Year " + j + ": " + "£" + Number(projectArray[j]).toFixed(2) + "<br>";
+}
+
+//Write Summary to Page above Calculate Button
+document.getElementById("Projection").innerHTML = text;
+document.getElementById("OverviewResults").innerHTML = "<strong>Capital: </strong>£" + capital + "; " + "<strong>Interest Rate: </strong>" + INT + "%; " + "<strong>Projected Interest Return: </strong> £" + ((Number(projectArray[25]).toFixed(2)) - capital);
+
+}
+
+
+</script>
+
+
+</body>
+</html>
